@@ -16,24 +16,25 @@ class HttpClientProtocol(Protocol):
     def dataReceived(self, data):
         print 'HttpClientProtocol received data[%d]:%s' % (self.count, data)
         self.count += 1
-        if self.content_len == 0:
-            self.rsp += data
-            header_end = self.rsp.find('\r\n\r\n')
-            if header_end:
-                print 'header_end:', header_end
-                self.header = self.rsp[0:header_end]
-                print 'header:', self.header
-                content_begin = self.header.find('Content-Length: ')
-                content_end = self.header.find('\n', content_begin)
-                content = self.header[content_begin:content_end]
-                print 'content:', content
-                self.content_len = int(content.split(' ')[1])
-                self.body = self.rsp[header_end+4:]
-                print 'body:', self.body
-        else:
-            self.body += data
-        if len(self.body) >= self.content_len:
-            self.factory.rsp_finished(self.header + '\r\n\r\n' + self.body)
+        self.factory.rsp_finished(data)
+        # if self.content_len == 0:
+        #     self.rsp += data
+        #     header_end = self.rsp.find('\r\n\r\n')
+        #     if header_end:
+        #         print 'header_end:', header_end
+        #         self.header = self.rsp[0:header_end]
+        #         print 'header:', self.header
+        #         content_begin = self.header.find('Content-Length: ')
+        #         content_end = self.header.find('\n', content_begin)
+        #         content = self.header[content_begin:content_end]
+        #         print 'content:', content
+        #         self.content_len = int(content.split(' ')[1])
+        #         self.body = self.rsp[header_end+4:]
+        #         print 'body:', self.body
+        # else:
+        #     self.body += data
+        # if len(self.body) >= self.content_len:
+        #     self.factory.rsp_finished(self.header + '\r\n\r\n' + self.body)
 
 
     

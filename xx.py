@@ -11,3 +11,4 @@ x.func()
 x.func()
 
 y.func()
+abc
